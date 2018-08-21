@@ -90,6 +90,7 @@ const INITIAL_SUGGESTION_QUANTITY = 2;
 const PAGE_SIZE = 10;
 const MAX_PAGES = 3;
 const SUGGESTION_QUANTITY = isPaginationEnabled ? PAGE_SIZE * MAX_PAGES : PAGE_SIZE;
+const MIN_QUERY_LENGTH = 2;
 
 const FEATURED_SUGGESTIONS_AT_TOP = [ 'group_7', 'group_8' ];
 let searchVendor = 'domainsbot';
@@ -376,6 +377,7 @@ class RegisterDomainStep extends React.Component {
 							describedBy={ 'step-header' }
 							dir="ltr"
 							initialValue={ this.state.lastQuery }
+							minLength={ MIN_QUERY_LENGTH }
 							maxLength={ 60 }
 							onBlur={ this.save }
 							onSearch={ this.onSearch }
@@ -584,6 +586,10 @@ class RegisterDomainStep extends React.Component {
 	onSearchChange = ( searchQuery, callback = noop ) => {
 		if ( ! this._isMounted ) {
 			return;
+		}
+
+		if ( searchQuery.length < MIN_QUERY_LENGTH ) {
+			searchQuery = '';
 		}
 
 		const loadingResults = Boolean( getFixedDomainSearch( searchQuery ) );
@@ -842,6 +848,10 @@ class RegisterDomainStep extends React.Component {
 	};
 
 	onSearch = ( searchQuery, { shouldQuerySubdomains = true } = {} ) => {
+		if ( searchQuery.length < MIN_QUERY_LENGTH ) {
+			searchQuery = '';
+		}
+
 		debug( 'onSearch handler was triggered with query', searchQuery );
 		const domain = getFixedDomainSearch( searchQuery );
 
