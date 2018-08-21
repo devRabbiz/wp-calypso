@@ -1,6 +1,9 @@
 /**
  * External dependencies
+ *
+ * @format
  */
+
 import React from 'react';
 
 /**
@@ -28,16 +31,19 @@ function Editor( { settings, hasFixedToolbar, post, overridePost, onError, ...pr
 
 	return (
 		<StrictMode>
-			<EditorProvider settings={ editorSettings } post={ { ...post, ...overridePost } } { ...props }>
+			<EditorProvider
+				settings={ editorSettings }
+				post={ { ...post, ...overridePost } }
+				{ ...props }
+			>
 				<ErrorBoundary onError={ onError }>
-					<Layout />
+					<Layout post={ post } />
 				</ErrorBoundary>
 			</EditorProvider>
 		</StrictMode>
 	);
 }
 
-
-export default withSelect( ( select ) => ( {
+export default withSelect( select => ( {
 	hasFixedToolbar: select( 'core/edit-post' ).isFeatureActive( 'fixedToolbar' ),
 } ) )( Editor );

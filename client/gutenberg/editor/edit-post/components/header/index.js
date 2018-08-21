@@ -1,6 +1,9 @@
 /**
  * External dependencies
+ *
+ * @format
  */
+
 import React from 'react';
 
 /**
@@ -8,11 +11,7 @@ import React from 'react';
  */
 import { __ } from '@wordpress/i18n';
 import { IconButton } from '@wordpress/components';
-import {
-	PostPreviewButton,
-	PostSavedState,
-	PostPublishPanelToggle,
-} from '@wordpress/editor';
+import { PostPreviewButton, PostSavedState, PostPublishPanelToggle } from '@wordpress/editor';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { DotTip } from '@wordpress/nux';
@@ -25,6 +24,7 @@ import HeaderToolbar from './header-toolbar';
 import PinnedPlugins from './pinned-plugins';
 
 function Header( {
+	post,
 	isEditorSidebarOpened,
 	openGeneralSidebar,
 	closeGeneralSidebar,
@@ -44,13 +44,10 @@ function Header( {
 			className="edit-post-header"
 			tabIndex="-1"
 		>
-			<HeaderToolbar />
+			<HeaderToolbar post={ post } />
 			{ ! isPublishSidebarOpened && (
 				<div className="edit-post-header__settings">
-					<PostSavedState
-						forceIsDirty={ hasActiveMetaboxes }
-						forceIsSaving={ isSaving }
-					/>
+					<PostSavedState forceIsDirty={ hasActiveMetaboxes } forceIsSaving={ isSaving } />
 					<PostPreviewButton />
 					<PostPublishPanelToggle
 						isOpen={ isPublishSidebarOpened }
@@ -66,7 +63,9 @@ function Header( {
 						aria-expanded={ isEditorSidebarOpened }
 					>
 						<DotTip id="core/editor.settings">
-							{ __( 'You’ll find more settings for your page and blocks in the sidebar. Click ‘Settings’ to open it.' ) }
+							{ __(
+								'You’ll find more settings for your page and blocks in the sidebar. Click ‘Settings’ to open it.'
+							) }
 						</DotTip>
 					</IconButton>
 					<PinnedPlugins.Slot />
@@ -79,7 +78,7 @@ function Header( {
 }
 
 export default compose(
-	withSelect( ( select ) => ( {
+	withSelect( select => ( {
 		isEditorSidebarOpened: select( 'core/edit-post' ).isEditorSidebarOpened(),
 		isPublishSidebarOpened: select( 'core/edit-post' ).isPublishSidebarOpened(),
 		hasActiveMetaboxes: select( 'core/edit-post' ).hasMetaBoxes(),
@@ -87,7 +86,9 @@ export default compose(
 		hasBlockSelection: !! select( 'core/editor' ).getBlockSelectionStart(),
 	} ) ),
 	withDispatch( ( dispatch, { hasBlockSelection } ) => {
-		const { openGeneralSidebar, closeGeneralSidebar, togglePublishSidebar } = dispatch( 'core/edit-post' );
+		const { openGeneralSidebar, closeGeneralSidebar, togglePublishSidebar } = dispatch(
+			'core/edit-post'
+		);
 		const sidebarToOpen = hasBlockSelection ? 'edit-post/block' : 'edit-post/document';
 		return {
 			openGeneralSidebar: () => openGeneralSidebar( sidebarToOpen ),
@@ -95,5 +96,5 @@ export default compose(
 			togglePublishSidebar: togglePublishSidebar,
 			hasBlockSelection: undefined,
 		};
-	} ),
+	} )
 )( Header );

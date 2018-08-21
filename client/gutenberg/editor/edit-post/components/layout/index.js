@@ -1,6 +1,9 @@
 /**
  * External dependencies
+ *
+ * @format
  */
+
 import React from 'react';
 import classnames from 'classnames';
 
@@ -39,6 +42,7 @@ import PluginPostPublishPanel from '../sidebar/plugin-post-publish-panel';
 import PluginPrePublishPanel from '../sidebar/plugin-pre-publish-panel';
 
 function Layout( {
+	post,
 	mode,
 	editorSidebarOpened,
 	pluginSidebarOpened,
@@ -68,9 +72,9 @@ function Layout( {
 		<div className={ className }>
 			<DocumentTitle />
 			<BrowserURL />
-			<UnsavedChangesWarning/>
+			<UnsavedChangesWarning />
 			<AutosaveMonitor />
-			<Header />
+			<Header post={ post } />
 			<div
 				className="edit-post-layout__content"
 				role="region"
@@ -115,9 +119,7 @@ function Layout( {
 					<DocumentSidebar />
 					<BlockSidebar />
 					<Sidebar.Slot />
-					{
-						isMobileViewport && sidebarIsOpened && <ScrollLock />
-					}
+					{ isMobileViewport && sidebarIsOpened && <ScrollLock /> }
 				</Fragment>
 			) }
 			<Popover.Slot />
@@ -128,7 +130,7 @@ function Layout( {
 }
 
 export default compose(
-	withSelect( ( select ) => ( {
+	withSelect( select => ( {
 		mode: select( 'core/edit-post' ).getEditorMode(),
 		editorSidebarOpened: select( 'core/edit-post' ).isEditorSidebarOpened(),
 		pluginSidebarOpened: select( 'core/edit-post' ).isPluginSidebarOpened(),
@@ -138,7 +140,7 @@ export default compose(
 		hasActiveMetaboxes: select( 'core/edit-post' ).hasMetaBoxes(),
 		isSaving: select( 'core/edit-post' ).isSavingMetaBoxes(),
 	} ) ),
-	withDispatch( ( dispatch ) => {
+	withDispatch( dispatch => {
 		const { closePublishSidebar, togglePublishSidebar } = dispatch( 'core/edit-post' );
 		return {
 			closePublishSidebar,
@@ -146,5 +148,5 @@ export default compose(
 		};
 	} ),
 	navigateRegions,
-	withViewportMatch( { isMobileViewport: '< small' } ),
+	withViewportMatch( { isMobileViewport: '< small' } )
 )( Layout );
