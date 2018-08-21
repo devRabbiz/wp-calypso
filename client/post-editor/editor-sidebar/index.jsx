@@ -12,6 +12,7 @@ import EditorDrawer from 'post-editor/editor-drawer';
 import EditorSidebarHeader from './header';
 import SidebarFooter from 'layout/sidebar/footer';
 import EditorDeletePost from 'post-editor/editor-delete-post';
+import EditorGutenbergOptIn from 'post-editor/editor-gutenberg-opt-in';
 
 export class EditorSidebar extends Component {
 	static propTypes = {
@@ -44,6 +45,7 @@ export class EditorSidebar extends Component {
 					onSave={ onSave }
 					confirmationSidebarStatus={ confirmationSidebarStatus }
 				/>
+				<EditorGutenbergOptIn />
 				<SidebarFooter>
 					<EditorDeletePost onTrashingPost={ onTrashingPost } />
 				</SidebarFooter>
