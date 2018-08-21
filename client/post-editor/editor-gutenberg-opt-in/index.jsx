@@ -12,10 +12,6 @@ import { connect } from 'react-redux';
  * Internal dependencies
  */
 import { localize } from 'i18n-calypso';
-import { getSelectedSiteId } from 'state/ui/selectors';
-import { getEditorPostId } from 'state/ui/editor/selectors';
-// import { getEditedPostValue } from 'state/posts/selectors';
-import { getSiteSlug } from 'state/sites/selectors';
 import Button from 'components/button';
 import Dialog from 'components/dialog';
 
@@ -25,15 +21,13 @@ class EditorGutenbergOptIn extends Component {
 	};
 	static propTypes = {
 		translate: PropTypes.func,
-		siteSlug: PropTypes.string,
-		postID: PropTypes.string,
-		postType: PropTypes.string,
+		gutenbergURL: PropTypes.string,
 	};
 
 	render() {
-		const { translate, siteSlug, postID } = this.props;
+		const { translate, gutenbergURL } = this.props;
 		const buttons = [
-			<Button key="gutenberg" href={ `gutenberg/post/${ siteSlug }/${ postID || '' }` } primary>
+			<Button key="gutenberg" href={ gutenbergURL } primary>
 				{ translate( 'Try the new editor' ) }
 			</Button>,
 			{ action: 'cancel', label: translate( 'Use the classic editor' ) },
@@ -47,7 +41,7 @@ class EditorGutenbergOptIn extends Component {
 					onClose={ this.onCloseDialog }
 				>
 					<div className="editor-gutenberg-opt-in__left">
-						<img src="/calypso/images/posts/gutenberg.png" alt="" />
+						<img src="/calypso/images/illustrations/gutenberg.svg" alt="" />
 					</div>
 					<div className="editor-gutenberg-opt-in__right">
 						<h1>{ translate( 'Try out the new building blocks of the web' ) }</h1>
@@ -65,6 +59,7 @@ class EditorGutenbergOptIn extends Component {
 				</Dialog>
 
 				<div className="editor-gutenberg-opt-in__sidebar">
+					<img src="/calypso/images/illustrations/gutenberg-mini.svg" alt="" />
 					<p>Try our new editor and level-up your layout.</p>
 					<Button onClick={ this.onShowDialog } action="show">
 						Learn more
@@ -83,12 +78,8 @@ class EditorGutenbergOptIn extends Component {
 	};
 }
 
-export default connect( state => {
-	const siteID = getSelectedSiteId( state );
-	const postID = getEditorPostId( state );
-	// const postType = getEditedPostValue( state, siteID, postID, 'type' );
+export default connect( () => {
 	return {
-		siteSlug: getSiteSlug( state, siteID ),
-		postID: postID,
+		gutenbergURL: window.location.origin + '/gutenberg' + window.location.pathname,
 	};
 } )( localize( EditorGutenbergOptIn ) );
