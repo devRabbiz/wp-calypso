@@ -92,7 +92,7 @@ function HeaderToolbar( {
 		<NavigableToolbar className="edit-post-header-toolbar" aria-label={ __( 'Editor Toolbar' ) }>
 			<Button
 				borderless
-				className="editor-ground-control__back"
+				className="edit-post-header-toolbar__back"
 				onClick={ onCloseButtonClick }
 				aria-label={ translate( 'Close' ) }
 			>
