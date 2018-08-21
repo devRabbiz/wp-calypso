@@ -102,6 +102,9 @@
 	.site__info {
 		width: auto;
 	}
+	.site__title::after {
+		width: 0;
+	}
 	@include breakpoint( '<660px' ) {
 		display: none;
 	}
