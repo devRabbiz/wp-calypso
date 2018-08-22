@@ -41,15 +41,18 @@ class EditorGutenbergOptInDialog extends Component {
 				className="editor-gutenberg-opt-in-dialog"
 				onClose={ this.onCloseDialog }
 			>
-				<header>
-					<button onClick={ this.onCloseDialog } className="editor-gutenberg-opt-in-dialog__close">
-						<Gridicon icon="cross" />
-					</button>
-				</header>
 				<div className="editor-gutenberg-opt-in-dialog__left">
 					<img src="/calypso/images/illustrations/gutenberg.svg" alt="" />
 				</div>
 				<div className="editor-gutenberg-opt-in-dialog__right">
+					<header>
+						<button
+							onClick={ this.onCloseDialog }
+							className="editor-gutenberg-opt-in-dialog__close"
+						>
+							<Gridicon icon="cross" />
+						</button>
+					</header>
 					<h1>{ translate( 'Try out the new building blocks of the web' ) }</h1>
 					<p>
 						{ translate(

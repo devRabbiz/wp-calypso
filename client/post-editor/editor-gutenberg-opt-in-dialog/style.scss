@@ -1,15 +1,23 @@
+/** @format */
+
 .editor-gutenberg-opt-in-dialog {
-	overflow-y: hidden;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	padding: 0;
 }
 
 .editor-gutenberg-opt-in-dialog__left {
-	width: 34%;
-	float: left;
+	background-color: lighten( $gray, 33% );
+	width: 33%;
 }
 
 .editor-gutenberg-opt-in-dialog__right {
-	width: 66%;
-	float: left;
+	width: 60%;
+}
+
+.editor-gutenberg-opt-in-dialog__left img {
+	overflow-y: clip;
 }
 
 .editor-gutenberg-opt-in-dialog__close {
