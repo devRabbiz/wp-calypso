@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 /**
  * Internal dependencies
  */
+import { isEnabled } from 'config';
 import EditorDrawer from 'post-editor/editor-drawer';
 import EditorSidebarHeader from './header';
 import SidebarFooter from 'layout/sidebar/footer';
@@ -46,8 +47,8 @@ export class EditorSidebar extends Component {
 					onSave={ onSave }
 					confirmationSidebarStatus={ confirmationSidebarStatus }
 				/>
-				<EditorGutenbergOptInDialog />
-				<EditorGutenbergOptInSidebar />
+				{ isEnabled( 'gutenberg' ) && <EditorGutenbergOptInSidebar /> }
+				{ isEnabled( 'gutenberg' ) && <EditorGutenbergOptInDialog /> }
 				<SidebarFooter>
 					<EditorDeletePost onTrashingPost={ onTrashingPost } />
 				</SidebarFooter>
