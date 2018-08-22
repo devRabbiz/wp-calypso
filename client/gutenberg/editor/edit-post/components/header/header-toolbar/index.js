@@ -7,7 +7,6 @@ import React from 'react';
 import { findLast } from 'lodash';
 import { localize } from 'i18n-calypso';
 import { connect } from 'react-redux';
-import page from 'page';
 
 /**
  * WordPress dependencies
@@ -36,9 +35,48 @@ import Button from 'components/button';
 import Drafts from 'layout/masterbar/drafts';
 import Site from 'blocks/site';
 import { addSiteFragment } from 'lib/route';
-import { recordTracksEvent } from 'state/analytics/actions';
+import { recordTracksEvent, withAnalytics } from 'state/analytics/actions';
+import { navigate } from 'state/ui/actions';
 import { getSelectedSite } from 'state/ui/selectors';
 import { getRouteHistory } from 'state/ui/action-log/selectors';
+
+/* eslint-disable wpcalypso/jsx-classname-namespace */
+function HeaderToolbar( {
+	closeEditor,
+	hasFixedToolbar,
+	isLargeViewport,
+	recordSiteButtonClick,
+	site,
+	translate,
+} ) {
+	const onCloseButtonClick = () => closeEditor();
+
+	return (
+		<NavigableToolbar className="edit-post-header-toolbar" aria-label={ __( 'Editor Toolbar' ) }>
+			<Button
+				borderless
+				className="edit-post-header-toolbar__back"
+				onClick={ onCloseButtonClick }
+				aria-label={ translate( 'Close' ) }
+			>
+				{ translate( 'Close' ) }
+			</Button>
+			<Site compact site={ site } indicator={ false } onSelect={ recordSiteButtonClick } />
+			<Drafts />
+			<Inserter position="bottom right" />
+			<EditorHistoryUndo />
+			<EditorHistoryRedo />
+			<TableOfContents />
+			{ hasFixedToolbar &&
+				isLargeViewport && (
+					<div className="edit-post-header-toolbar__block-toolbar">
+						<BlockToolbar />
+					</div>
+				) }
+		</NavigableToolbar>
+	);
+}
+/* eslint-enable wpcalypso/jsx-classname-namespace */
 
 function getCloseButtonPath( routeHistory, site ) {
 	const editorPathRegex = /^\/gutenberg\/(post|page|(edit\/[^\/]+))\/[^\/]+(\/\d+)?$/i;
@@ -73,56 +111,32 @@ function getCloseButtonPath( routeHistory, site ) {
 	return path;
 }
 
-/* eslint-disable wpcalypso/jsx-classname-namespace */
-function HeaderToolbar( {
-	hasFixedToolbar,
-	isLargeViewport,
-	recordCloseButtonClick,
-	recordSiteButtonClick,
-	routeHistory,
-	site,
-	translate,
-} ) {
-	const onCloseButtonClick = () => {
-		recordCloseButtonClick();
-		page.show( getCloseButtonPath( routeHistory, site ) );
-	};
-
-	return (
-		<NavigableToolbar className="edit-post-header-toolbar" aria-label={ __( 'Editor Toolbar' ) }>
-			<Button
-				borderless
-				className="edit-post-header-toolbar__back"
-				onClick={ onCloseButtonClick }
-				aria-label={ translate( 'Close' ) }
-			>
-				{ translate( 'Close' ) }
-			</Button>
-			<Site compact site={ site } indicator={ false } onSelect={ recordSiteButtonClick } />
-			<Drafts />
-			<Inserter position="bottom right" />
-			<EditorHistoryUndo />
-			<EditorHistoryRedo />
-			<TableOfContents />
-			{ hasFixedToolbar &&
-				isLargeViewport && (
-					<div className="edit-post-header-toolbar__block-toolbar">
-						<BlockToolbar />
-					</div>
-				) }
-		</NavigableToolbar>
-	);
-}
-/* eslint-enable wpcalypso/jsx-classname-namespace */
-
 const mapStateToProps = state => ( {
 	routeHistory: getRouteHistory( state ),
 	site: getSelectedSite( state ),
 } );
 
-const mapDispatchToProps = {
-	recordSiteButtonClick: () => recordTracksEvent( 'calypso_gutenberg_editor_site_button_click' ),
-	recordCloseButtonClick: () => recordTracksEvent( 'calypso_gutenberg_editor_close_button_click' ),
+const mapDispatchToProps = dispatch => {
+	return {
+		closeEditor: ( { routeHistory, site } ) =>
+			dispatch(
+				withAnalytics(
+					recordTracksEvent( 'calypso_gutenberg_editor_close_button_click' ),
+					navigate( getCloseButtonPath( routeHistory, site ) )
+				)
+			),
+		recordSiteButtonClick: () =>
+			dispatch( recordTracksEvent( 'calypso_gutenberg_editor_site_button_click' ) ),
+	};
+};
+
+const mergeProps = ( stateProps, dispatchProps, ownProps ) => {
+	return {
+		...ownProps,
+		...stateProps,
+		...dispatchProps,
+		closeEditor: () => dispatchProps.closeEditor( stateProps ),
+	};
 };
 
 export default compose( [
@@ -133,6 +147,7 @@ export default compose( [
 ] )(
 	connect(
 		mapStateToProps,
-		mapDispatchToProps
+		mapDispatchToProps,
+		mergeProps
 	)( localize( HeaderToolbar ) )
 );
