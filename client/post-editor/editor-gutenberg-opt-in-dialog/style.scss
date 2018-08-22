@@ -11,3 +11,16 @@
 	width: 66%;
 	float: left;
 }
+
+.editor-gutenberg-opt-in-dialog__close {
+	float: right;
+
+	width: 48px;
+	height: 49px;
+	cursor: pointer;
+	color: $gray;
+
+	&:hover {
+		color: $gray-dark;
+	}
+}

@@ -7,6 +7,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Gridicon from 'gridicons';
 
 /**
  * Internal dependencies
@@ -39,6 +40,11 @@ class EditorGutenbergOptInDialog extends Component {
 				className="editor-gutenberg-opt-in-dialog"
 				onClose={ this.onCloseDialog }
 			>
+				<header>
+					<button onClick={ this.onCloseDialog } className="editor-gutenberg-opt-in-dialog__close">
+						<Gridicon icon="cross" />
+					</button>
+				</header>
 				<div className="editor-gutenberg-opt-in-dialog__left">
 					<img src="/calypso/images/illustrations/gutenberg.svg" alt="" />
 				</div>
