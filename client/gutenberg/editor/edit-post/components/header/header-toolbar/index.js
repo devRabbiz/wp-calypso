@@ -40,30 +40,31 @@ import { recordTracksEvent } from 'state/analytics/actions';
 import { getSelectedSite } from 'state/ui/selectors';
 import { getRouteHistory } from 'state/ui/action-log/selectors';
 
-function getCloseButtonPath( routeHistory, site, post ) {
+function getCloseButtonPath( routeHistory, site ) {
+	const editorPathRegex = /^\/gutenberg\/(post|page|(edit\/[^\/]+))\/[^\/]+(\/\d+)?$/i;
+	const lastEditorPath = routeHistory[ routeHistory.length - 1 ].path;
+
 	// @see post-editor/editor-ground-control/index.jsx
 	const lastNonEditorPath = findLast(
 		routeHistory,
-		action => ! action.path.match( /^\/gutenberg\/(post|page|(edit\/[^\/]+))\/[^\/]+(\/\d+)?$/i )
+		action => ! action.path.match( editorPathRegex )
 	);
 	if ( lastNonEditorPath ) {
 		return lastNonEditorPath.path;
 	}
 
+	const editorPostType = lastEditorPath.match( editorPathRegex )[ 1 ];
+	let path;
+
 	// @see post-editor/post-editor.jsx
-	const { type } = post;
-	let path = '';
-	switch ( type ) {
-		case 'page':
-			path = '/pages';
-			break;
-		case 'post':
-			path = '/posts';
-			break;
-		default:
-			path = `/types/${ type }`;
+	if ( 'post' === editorPostType ) {
+		path = '/posts';
+	} else if ( 'page' === editorPostType ) {
+		path = '/pages';
+	} else {
+		path = `/types/${ editorPostType.split( '/' )[ 1 ] }`;
 	}
-	if ( type === 'post' && site && ! site.jetpack && ! site.single_user_site ) {
+	if ( 'post' === editorPostType && site && ! site.jetpack && ! site.single_user_site ) {
 		path += '/my';
 	}
 	if ( site ) {
@@ -79,13 +80,12 @@ function HeaderToolbar( {
 	recordCloseButtonClick,
 	recordSiteButtonClick,
 	routeHistory,
-	post,
 	site,
 	translate,
 } ) {
 	const onCloseButtonClick = () => {
 		recordCloseButtonClick();
-		page.show( getCloseButtonPath( routeHistory, site, post ) );
+		page.show( getCloseButtonPath( routeHistory, site ) );
 	};
 
 	return (
