@@ -7,6 +7,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import getCurrentRoute from 'state/selectors/get-current-route';
 import Gridicon from 'gridicons';
 
 /**
@@ -74,8 +75,9 @@ class EditorGutenbergOptInDialog extends Component {
 	};
 }
 
-export default connect( () => {
+export default connect( state => {
+	const currentRoute = getCurrentRoute( state );
 	return {
-		gutenbergURL: window.location.origin + '/gutenberg' + window.location.pathname,
+		gutenbergURL: `/gutenberg${ currentRoute }`,
 	};
 } )( localize( EditorGutenbergOptInDialog ) );
