@@ -47,8 +47,8 @@ export class EditorSidebar extends Component {
 					onSave={ onSave }
 					confirmationSidebarStatus={ confirmationSidebarStatus }
 				/>
-				{ isEnabled( 'gutenberg' ) && <EditorGutenbergOptInSidebar /> }
-				{ isEnabled( 'gutenberg' ) && <EditorGutenbergOptInDialog /> }
+				{ isEnabled( 'gutenberg/opt-in' ) && <EditorGutenbergOptInSidebar /> }
+				{ isEnabled( 'gutenberg/opt-in' ) && <EditorGutenbergOptInDialog /> }
 				<SidebarFooter>
 					<EditorDeletePost onTrashingPost={ onTrashingPost } />
 				</SidebarFooter>
