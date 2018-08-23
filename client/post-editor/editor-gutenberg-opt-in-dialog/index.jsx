@@ -13,21 +13,23 @@ import Gridicon from 'gridicons';
 /**
  * Internal dependencies
  */
+import isGutenbergOptInDialogShowing from 'state/selectors/is-gutenberg-opt-in-dialog-showing';
+import { hideGutenbergOptInDialog } from 'state/ui/gutenberg-opt-in-dialog/actions';
 import { localize } from 'i18n-calypso';
 import Button from 'components/button';
 import Dialog from 'components/dialog';
 
 class EditorGutenbergOptInDialog extends Component {
-	state = {
-		showDialog: true,
-	};
 	static propTypes = {
+		// connected properties
 		translate: PropTypes.func,
 		gutenbergURL: PropTypes.string,
+		isDialogVisible: PropTypes.bool,
+		hideGutenbergOptInDialog: PropTypes.func,
 	};
 
 	render() {
-		const { translate, gutenbergURL } = this.props;
+		const { translate, gutenbergURL, isDialogVisible } = this.props;
 		const buttons = [
 			<Button key="gutenberg" href={ gutenbergURL } primary>
 				{ translate( 'Try the new editor' ) }
@@ -36,7 +38,7 @@ class EditorGutenbergOptInDialog extends Component {
 		];
 		return (
 			<Dialog
-				isVisible={ this.state.showDialog }
+				isVisible={ isDialogVisible }
 				buttons={ buttons }
 				className="editor-gutenberg-opt-in-dialog"
 				onClose={ this.onCloseDialog }
@@ -69,18 +71,21 @@ class EditorGutenbergOptInDialog extends Component {
 		);
 	}
 
-	onShowDialog = () => {
-		this.setState( { showDialog: true } );
-	};
-
 	onCloseDialog = () => {
-		this.setState( { showDialog: false } );
+		this.props.hideGutenbergOptInDialog();
 	};
 }
 
-export default connect( state => {
-	const currentRoute = getCurrentRoute( state );
-	return {
-		gutenbergURL: `/gutenberg${ currentRoute }`,
-	};
-} )( localize( EditorGutenbergOptInDialog ) );
+export default connect(
+	state => {
+		const currentRoute = getCurrentRoute( state );
+		const isDialogVisible = isGutenbergOptInDialogShowing( state );
+		return {
+			gutenbergURL: `/gutenberg${ currentRoute }`,
+			isDialogVisible,
+		};
+	},
+	{
+		hideGutenbergOptInDialog,
+	}
+)( localize( EditorGutenbergOptInDialog ) );
