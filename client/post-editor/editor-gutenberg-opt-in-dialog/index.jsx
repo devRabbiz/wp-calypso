@@ -54,7 +54,7 @@ class EditorGutenbergOptInDialog extends Component {
 						</button>
 					</header>
 					<h1>{ translate( 'Try out the new building blocks of the web' ) }</h1>
-					<p>
+					<p className="editor-gutenberg-opt-in-dialog__subhead">
 						{ translate(
 							'A new publishing experience is coming to WordPress. The new editor lets you pick from a growing collection of blocks to build your ideal layout.'
 						) }

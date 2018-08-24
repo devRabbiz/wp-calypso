@@ -5,27 +5,50 @@
 	flex-flow: row wrap;
 	justify-content: space-between;
 	padding: 0;
+	max-width: 800px;
+
+	h1 {
+		font-size: 32px;
+		height: auto;
+		line-height: 1.2;
+	}
+
+	p {
+		&.editor-gutenberg-opt-in-dialog__subhead {
+			font-size: 18px;
+			color: $gray-darken-20;
+		}
+	}
 }
 
 .editor-gutenberg-opt-in-dialog__left {
-	background-color: $gray-light;
-	background: url( '/calypso/images/illustrations/gutenberg.svg' );
-	background-size: cover;
-	background-repeat: no-repeat;
-	width: 33%;
+	background: $gray-light url( '/calypso/images/illustrations/gutenberg.svg' ) no-repeat 40px 43%;
+	background-size: 250px;
+	width: 260px;
+	position: relative;
+	z-index: 1; /* Put it on top of the white overlay from .dialog__action-buttons:before */
+
+	&:after {
+		content: '';
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		width: 48px;
+		background: linear-gradient( to right, rgba( 0, 0, 0, 0 ) 0%, rgba( 0, 0, 0, 0.1 ) 100% );
+	}
 }
 
 .editor-gutenberg-opt-in-dialog__right {
-	width: 60%;
-	padding-left: 10px;
-	box-shadow: -10px 0 30px 30px rgba( $gray-dark, 0.2 );
+	box-sizing: border-box;
+	width: calc( 100% - 260px );
+	padding: 32px 40px;
 }
 
 .editor-gutenberg-opt-in-dialog__close {
-	float: right;
-
-	width: 48px;
-	height: 49px;
+	position: absolute;
+	top: 16px;
+	right: 16px;
 	cursor: pointer;
 	color: $gray;
 
