@@ -8,16 +8,17 @@
 }
 
 .editor-gutenberg-opt-in-dialog__left {
-	background-color: lighten( $gray, 33% );
+	background-color: $gray-light;
+	background: url( '/calypso/images/illustrations/gutenberg.svg' );
+	background-size: cover;
+	background-repeat: no-repeat;
 	width: 33%;
 }
 
 .editor-gutenberg-opt-in-dialog__right {
 	width: 60%;
-}
-
-.editor-gutenberg-opt-in-dialog__left img {
-	overflow-y: clip;
+	padding-left: 10px;
+	box-shadow: -10px 0 30px 30px rgba( $gray-dark, 0.2 );
 }
 
 .editor-gutenberg-opt-in-dialog__close {

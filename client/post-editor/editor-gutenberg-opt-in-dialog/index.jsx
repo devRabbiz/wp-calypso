@@ -43,9 +43,7 @@ class EditorGutenbergOptInDialog extends Component {
 				className="editor-gutenberg-opt-in-dialog"
 				onClose={ this.onCloseDialog }
 			>
-				<div className="editor-gutenberg-opt-in-dialog__left">
-					<img src="/calypso/images/illustrations/gutenberg.svg" alt="" />
-				</div>
+				<div className="editor-gutenberg-opt-in-dialog__left" />
 				<div className="editor-gutenberg-opt-in-dialog__right">
 					<header>
 						<button
